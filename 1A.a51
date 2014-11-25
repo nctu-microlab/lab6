@@ -2,7 +2,7 @@
   jmp START
   
   ORG 03h
-  jmp INT0
+  jmp INTT0
   
 START:
   mov IE, #10000001b
@@ -20,11 +20,11 @@ LOOP:
   djnz R7, LOOP
   jmp MAIN
   
-INT0:
-  push A
+INTT0:
+  push ACC
   push PSW
   setb PSW.3
-  mov R7, 8
+  mov R7, #8
   
 LOOP1:
   mov A, #00h
@@ -36,19 +36,24 @@ LOOP1:
   djnz R7, LOOP1
   
   pop PSW
-  pop A
+  pop ACC
   reti
   
 DELAY:
   push 4
   push 5
-  
+  push 6
+
+  mov R6, #2
+D2:
   mov R5, #0FFh
 D1:
   mov R4, #0FFh
   djnz R4, $
   djnz R5, D1
+  djnz R6, D2
   
+  pop 6
   pop 5
   pop 4
   ret

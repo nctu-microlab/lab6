@@ -6,33 +6,39 @@ void delay() {
 }
 
 void left_to_right() interrupt 0 {
+	unsigned char original = P1;
 	P1 = 0x7F;
 	
 	while(1) {
+		delay();
+		
 		if(P1 == 0xFE)
-			P1 = 0x7F;
+			break;
 		else {
 			P1 >>= 1;
 			P17 = 1;
 		}
-		
-		delay();
 	}
+	
+	P1 = original;
 }
 
 void right_to_left() interrupt 2 {
+	unsigned char original = P1;
 	P1 = 0xFE;
 	
 	while(1) {
+		delay();
+		
 		if(P1 == 0x7F)
-			P1 = 0xFE;
+			break;
 		else {
 			P1 <<= 1;
 			P10 = 1;
 		}
-		
-		delay();
 	}
+	
+	P1 = original;
 }
 
 void main() {
